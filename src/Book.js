@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 class Book extends Component {
 	render() {
-   const { book } = this.props
+   const { book, onShelfChange } = this.props
 	 return (
     <li>
       <div className="book">
@@ -14,7 +14,7 @@ class Book extends Component {
           }}>
           </div>
           <div className="book-shelf-changer">
-            <select>
+            <select value={book.shelf} onChange={e => onShelfChange(book, e.target.value)}>
               <option value="none" disabled>Move to ...</option>
               <option value="currentlyReading"> Current Reading</option>
               <option value="wantToRead">Want to read</option>

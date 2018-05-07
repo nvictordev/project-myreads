@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 class Search extends Component {
   state = {
     query: '',
-    bookSearch: ['love', 'vp'] 
+    bookSearch: [] 
   }
   updateSearch(query) {
     BooksAPI.search(query).then((bookSearch) =>
@@ -15,6 +15,7 @@ class Search extends Component {
   }
   render() {
     const { query, bookSearch } = this.state
+    const { onShelfChange } = this.props
     return (
       <div className="app">
         <div className="search-books">
@@ -23,19 +24,20 @@ class Search extends Component {
             <div className="search-books-input-wrapper">
               <input type="text" 
                 placeholder="Search by title or author"
-                value={query}/>
-                onChange={e => this.updateSearch(e.target.value)}
+                value={query}
+                onChange={e => this.updateSearch(e.target.value)}/>
             </div>
           </div>
           <div className="search-books-results">
             <ol className="books-grid">
-              { query.length > 0 && (
-                {bookSearch.map(book => (
-                  <Book
-                    book={book}
-                  />
-                ))}
-              )}
+                {bookSearch.map((book, index) => {
+                  return (
+                    <Book
+                      book={book}
+                      key={index}
+                      onShelfChange={onShelfChange}/>
+                  )
+                })}
             </ol>
           </div>
         </div>
@@ -44,5 +46,5 @@ class Search extends Component {
   }
 }
 
-export default Search
+export default Search;
 

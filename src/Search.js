@@ -1,21 +1,31 @@
 import React, { Component } from 'react'
 import Book from './Book'
 import * as BooksAPI from './BooksAPI'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 class Search extends Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    onShelfChange: PropTypes.func.isRequired
+  }
   state = {
     query: '',
-    bookSearch: [] 
+    bookSearch: [],
+    errorMessage: false
   }
-  updateSearch(query) {
-    BooksAPI.search(query).then((bookSearch) =>
-      this.setState({ bookSearch }))
-    this.setState({ query })
+  updateSearch = (query) => {
+    this.setState({ query: query.trim() })
+    if (query) {
+      BooksAPI.search(query).then((bookSearch) =>
+        bookSearch.length > 0 ? this.setState({ bookSearch }) : this.setState({ bookSearch: [], errorMessage:true }))
+    } else {
+      this.setState({ bookSearch:[] })
+    }
   }
   render() {
-    const { query, bookSearch } = this.state
-    const { onShelfChange } = this.props
+    const { query, bookSearch, errorMessage } = this.state
+    const { books, onShelfChange } = this.props
     return (
       <div className="app">
         <div className="search-books">
@@ -33,12 +43,18 @@ class Search extends Component {
                 {bookSearch.map((book, index) => {
                   return (
                     <Book
+                      books={books}
                       book={book}
                       key={index}
                       onShelfChange={onShelfChange}/>
                   )
                 })}
             </ol>
+            { errorMessage && (
+              <div>
+                <h4>No Books Found</h4>
+              </div>
+            )}
           </div>
         </div>
       </div>

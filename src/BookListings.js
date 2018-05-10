@@ -5,7 +5,8 @@ import BookShelf from './BookShelf'
 
 class BookListings extends Component {
   static propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onShelfChange: PropTypes.func.isRequired
   }
   render() {
     const shelfTitles = [{title: 'Currently Reading', type: 'currentlyReading'},
